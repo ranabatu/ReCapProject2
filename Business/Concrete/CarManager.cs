@@ -2,6 +2,7 @@
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -44,8 +45,10 @@ namespace Business.Concrete
                 Console.WriteLine("Hatalı giriş.");
             }
         }
-
-   
+        public List<CarDetailDto> GetCarDetail()
+        {
+            return _carDal.GetCarDetail();
+        }
     }
 
         
