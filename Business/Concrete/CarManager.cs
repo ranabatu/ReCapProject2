@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -18,36 +21,43 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
-        }
-
-        public List<Car> GetCarsByBrandId(int id)
-        {
-            return _carDal.GetAll(c => c.BrandId == id);
-        }
-
-        public List<Car> GetCarsByColorId(int id)
-        {
-            return _carDal.GetAll(c => c.ColorId == id);
-        }
-
-       public void Add(Car car)
-        {
-            if (car.Description.Length > 2 && car.DailyPrice > 0) 
+            if (DateTime.Now.Hour == 22)
             {
-                _carDal.Add(car);
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
 
-            else 
-            {
-                Console.WriteLine("Hatalı giriş.");
-            }
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.Listed);
+
+            
         }
-        public List<CarDetailDto> GetCarDetail()
+
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return _carDal.GetCarDetail();
+            return new SuccessDataResult<List<Car>>( _carDal.GetAll(c => c.BrandId == id));
+        }
+
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+        }
+
+       
+        public IDataResult< List<CarDetailDto>> GetCarDetail()
+        {
+            return new SuccessDataResult<List<CarDetailDto>> ( _carDal.GetCarDetail());
+        }
+
+        public IResult Add(Car car)
+        {           
+            if (car.Description.Length < 2)
+            {
+                return new ErrorResult(Messages.NameInvalid);
+            }
+            _carDal.Add(car);
+
+            return new SuccessResult(Messages.Added);
         }
     }
 
