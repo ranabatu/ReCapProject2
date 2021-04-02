@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
-    public class CarManager : ICarServise
+    public class CarManager : ICarService
     {
         ICarDal _carDal;
 
@@ -21,12 +21,12 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public IDataResult<List<Car>> GetAll()
+        public IDataResult<List<Car>> GetCarsByBrandId()
         {
-            if (DateTime.Now.Hour == 22)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
+            //if (DateTime.Now.Hour == 22)
+            //{
+            //    return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            //}
 
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.Listed);
 
@@ -57,6 +57,23 @@ namespace Business.Concrete
             }
             _carDal.Add(car);
 
+            return new SuccessResult(Messages.Added);
+        }
+
+        public IDataResult<List<Car>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult Delete(Car car)
+        {
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.Deleted);
+        }
+
+        public IResult Update(Car car)
+        {
+            _carDal.Add(car);
             return new SuccessResult(Messages.Added);
         }
     }
