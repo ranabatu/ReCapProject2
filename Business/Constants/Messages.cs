@@ -14,6 +14,8 @@ namespace Business.Constants
         internal static string MaintenanceTime = "Sistem bakımda";
         internal static string Listed="Ürünler listelendi";
         public static string CantRental = "Ürünü kiralayamazsınız.";
+
+        public static List<Car> MaintenceTime { get; internal set; }
     }
     
 }
